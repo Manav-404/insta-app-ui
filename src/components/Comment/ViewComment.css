@@ -1,0 +1,49 @@
+
+.comment__container{
+    display: flex;
+    flex-direction: row;
+    height: 564px;
+    margin: auto;
+    width: 55%;   
+    margin-top: 200px;
+    background-color: white;
+    border-radius: 3px;
+    border  :1px solid #dbdbdb;
+    justify-content: space-between;
+}
+
+.comment__left{
+    width: 100%;
+
+}
+
+.comment__right{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-height: 564px;
+    overflow-y: auto;
+    
+
+}
+
+.comment__list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.comment__item{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.comment__name{
+    margin-left: 10px;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+
+}
