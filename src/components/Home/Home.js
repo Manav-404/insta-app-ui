@@ -12,7 +12,7 @@ import {
   createBookmark,
 } from "../Post/helper/PostHelper";
 import { postComment } from "../Comment/helper/commentHelper";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 const Home = () => {
   const { user, token } = isAuthenticated();
@@ -136,7 +136,12 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="card__comments">
-                  <p>View all comments</p>
+                  <Link
+                    to={`posts/comments/${post._id}`}
+                    className="card__comments__link"
+                  >
+                    <p className="card__comments__text">View all comments</p>
+                  </Link>
                 </div>
                 <section className="section">
                   <div className="card__send">

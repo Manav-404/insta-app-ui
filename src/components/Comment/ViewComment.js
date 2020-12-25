@@ -19,7 +19,9 @@ const ViewComment = () => {
   const getComments = () => {
     getCommentsByPostId(token, postId)
       .then((data) => {
-        setComment(data);
+        if (!data.error) {
+          setComment(data);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -32,8 +34,8 @@ const ViewComment = () => {
           <PostImageHelper post={postId} width={564} height={564} />
         </div>
         <div className="comment__right">
-          <div className="comment_list">
-            {comment.map((com, index) => {
+          {comment.length > 0 ? (
+            comment.map((com, index) => {
               return (
                 <div key={index} className="comment__item">
                   <ImageHelper id={com.user._id} size="small" />
@@ -44,8 +46,15 @@ const ViewComment = () => {
                   </div>
                 </div>
               );
-            })}
-          </div>
+            })
+          ) : (
+            <div className="comment__item">
+              <div className="comment__no__comments">
+                <p>No comments yet</p>
+              </div>
+            </div>
+          )}
+          <div className="comment_list"></div>
         </div>
       </div>
     );

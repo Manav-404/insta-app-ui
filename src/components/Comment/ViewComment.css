@@ -47,3 +47,11 @@
     font-family: 'Roboto', sans-serif;
 
 }
+
+.comment__no__comments{
+    margin-left: 10px;
+    align-items: center;
+    color: #8e8e8e;
+    font-family: 'Roboto', sans-serif;
+
+}

@@ -61,8 +61,15 @@
 .card__comments{
     display: inline;
     margin-left: 10px;
-    color: #8e8e8e;
     margin-top: 0px;
+}
+.card__comments__text{
+    color: #8e8e8e;
+}
+
+.card__comments__link{
+    text-decoration: none;
+
 }
 
 .section{
