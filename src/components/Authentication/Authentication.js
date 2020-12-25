@@ -9,6 +9,7 @@ import {
   authenticateUser,
 } from "./helper/authenticationHelper";
 import { Redirect } from "react-router-dom";
+import { CircularProgress } from "@material-ui/core";
 
 const Authentication = () => {
   const [signup, setSignup] = useState(false);
@@ -19,6 +20,7 @@ const Authentication = () => {
     error: "",
     redirect: false,
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setSignup(false);
@@ -42,10 +44,22 @@ const Authentication = () => {
     }
   };
 
+  const renderLoading = () => {
+    if (loading == true) {
+      return (
+        <div className="circular__progress">
+          <CircularProgress color="inherit" size={50} />
+        </div>
+      );
+    }
+  };
+
   const onSignUpSubmit = (event) => {
+    setLoading(true);
     event.preventDefault();
     Signup({ username, email, password })
       .then((data) => {
+        setLoading(false);
         if (data.error) {
           setValues({ ...values, error: data.error, redirect: false });
         } else {
@@ -64,9 +78,11 @@ const Authentication = () => {
   };
 
   const onSignInSubmit = (event) => {
+    setLoading(true);
     event.preventDefault();
     Signin({ email, password })
       .then((data) => {
+        setLoading(false);
         if (data.error) {
           setValues({ ...values, error: data.error, redirect: false });
         } else {
@@ -87,95 +103,100 @@ const Authentication = () => {
   };
 
   const loadSignup = () => {
-    return (
-      <div className="auth">
-        <div className="signup__container">
-          <img src={logo} alt="" height="50" width="50" />
-          <div className="title">Instagram</div>
-          <form>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={username}
-              onChange={handleChange("username")}
-            />
-            <input
-              type="email"
-              name="email"
-              value={email}
-              placeholder="Email"
-              onChange={handleChange("email")}
-            />
-            <input
-              type="password"
-              name="password"
-              value={password}
-              placeholder="Password"
-              onChange={handleChange("password")}
-            />
-            <br />
-            <br />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onSignUpSubmit}
-              fullWidth={true}
-            >
-              Sign Up
-            </Button>
-          </form>
-          <p className="signup__text" onClick={() => setSignup(false)}>
-            Already have an account ? Login
-          </p>
+    if (loading === false) {
+      return (
+        <div className="auth">
+          <div className="signup__container">
+            <img src={logo} alt="" height="50" width="50" />
+            <div className="title">Instagram</div>
+            <form>
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={username}
+                onChange={handleChange("username")}
+              />
+              <input
+                type="email"
+                name="email"
+                value={email}
+                placeholder="Email"
+                onChange={handleChange("email")}
+              />
+              <input
+                type="password"
+                name="password"
+                value={password}
+                placeholder="Password"
+                onChange={handleChange("password")}
+              />
+              <br />
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onSignUpSubmit}
+                fullWidth={true}
+              >
+                Sign Up
+              </Button>
+            </form>
+            <p className="signup__text" onClick={() => setSignup(false)}>
+              Already have an account ? Login
+            </p>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   const login = () => {
-    return (
-      <div className="auth">
-        <div className="login__container">
-          <img src={logo} alt="" height="50" width="50" />
-          <div className="title">Instagram</div>
-          <form>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={email}
-              id=""
-              onChange={handleChange("email")}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={handleChange("password")}
-            />
-            <br />
-            <br />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onSignInSubmit}
-              fullWidth={true}
-            >
-              Log In
-            </Button>
-          </form>
-          <p className="signup__text" onClick={() => setSignup(true)}>
-            Don't have an account ? Signup
-          </p>
+    if (loading === false) {
+      return (
+        <div className="auth">
+          <div className="login__container">
+            <img src={logo} alt="" height="50" width="50" />
+            <div className="title">Instagram</div>
+            <form>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={email}
+                id=""
+                onChange={handleChange("email")}
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={handleChange("password")}
+              />
+              <br />
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onSignInSubmit}
+                fullWidth={true}
+              >
+                Log In
+              </Button>
+            </form>
+            <p className="signup__text" onClick={() => setSignup(true)}>
+              Don't have an account ? Signup
+            </p>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   return (
     <div>
+      {renderLoading()}
       {errorOnSubmit()}
       {redirectToProfile()}
       {!signup ? login() : loadSignup()}

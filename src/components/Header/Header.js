@@ -14,6 +14,7 @@ const Header = () => {
   const { user } = isAuthenticated();
   const [home, setHome] = useState(false);
   const [post, setPost] = useState(false);
+  const [logout, setLogout] = useState(false);
   const [searchkey, setSearchKey] = useState("");
   const [keyboardCode, setKeyboardCode] = useState("");
 
@@ -28,6 +29,11 @@ const Header = () => {
 
     if (searchkey !== "" && keyboardCode === 13) {
       return <Redirect to={`/profile/search/${searchkey}`} />;
+    }
+
+    if (logout === true) {
+      localStorage.clear();
+      return <Redirect to="/" />;
     }
   };
 
@@ -54,14 +60,15 @@ const Header = () => {
       </div>
       <div className="header__right">
         <HomeRoundedIcon onClick={() => setHome(true)} />
-        <FavoriteBorderRoundedIcon />
         <PostAddRoundedIcon onClick={() => setPost(true)} />
         <Link to={`/profile/view/${user._id}`}>
           <ImageHelper id={user._id} size="small"></ImageHelper>
         </Link>
         {redirect()}
       </div>
-      <div className="header__empty"></div>
+      <div className="header__empty">
+        <p onClick={() => setLogout(true)}>Log out</p>
+      </div>
     </div>
   );
 };

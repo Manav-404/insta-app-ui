@@ -1,5 +1,5 @@
 
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 
 .profile{
@@ -153,7 +153,7 @@ input{
 }
 
 .search__item{
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -172,3 +172,9 @@ input{
     text-decoration: none;
     color: black;
 }
+.circular__progress{
+    position: fixed;
+    top: 50%;
+    left  :50%
+ }
+ 

@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rochester&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 
 
 body{
@@ -9,7 +11,11 @@ body{
 
 .header__empty{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    margin-right: 50px;
+    font-family: 'Roboto', sans-serif;
+    font-size: medium;
+    cursor: pointer;
 }
 
 .header__title{

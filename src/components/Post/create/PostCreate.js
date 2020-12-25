@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Header from "../../Header/Header";
 import "./PostCreate.css";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import { useState } from "react";
 import { createPost } from "../helper/PostHelper";
 import { isAuthenticated } from "../../Authentication/helper/authenticationHelper";
@@ -19,6 +19,8 @@ const PostCreate = () => {
     redirect: false,
   });
 
+  const [loading, setLoading] = useState(false);
+
   const { error, formData, redirect } = post;
 
   useEffect(() => {
@@ -31,10 +33,22 @@ const PostCreate = () => {
     setPost({ ...post, [name]: value });
   };
 
+  const renderLoading = () => {
+    if (loading === true) {
+      return (
+        <div className="circular__progress">
+          <CircularProgress color="inherit" size={50} />
+        </div>
+      );
+    }
+  };
+
   const onPostSubmit = (event) => {
+    setLoading(true);
     event.preventDefault();
     createPost(user._id, token, formData)
       .then((data) => {
+        setLoading(false);
         if (data.error) {
           setPost({
             ...post,
@@ -72,39 +86,42 @@ const PostCreate = () => {
   };
 
   const loadPost = () => {
-    return (
-      <div className="create">
-        <div className="create__container">
-          <input
-            accept="image/*"
-            type="file"
-            placeholder="Post picture"
-            onChange={handleChange("photo")}
-          />
-          <input
-            type="text"
-            name="name"
-            placeholder="Write a caption..."
-            onChange={handleChange("caption")}
-          />
-          <br />
-          <br />
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth={true}
-            onClick={onPostSubmit}
-          >
-            Post
-          </Button>
+    if (loading === false) {
+      return (
+        <div className="create">
+          <div className="create__container">
+            <input
+              accept="image/*"
+              type="file"
+              placeholder="Post picture"
+              onChange={handleChange("photo")}
+            />
+            <input
+              type="text"
+              name="name"
+              placeholder="Write a caption..."
+              onChange={handleChange("caption")}
+            />
+            <br />
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth={true}
+              onClick={onPostSubmit}
+            >
+              Post
+            </Button>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   return (
     <div>
       <Header />
+      {renderLoading()}
       {errorOnSubmit()}
       {redirectOnSubmit()}
       {loadPost()}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../Profile.css";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { createProfile } from "../helper/profileHelper";
 import {
@@ -21,6 +21,7 @@ const CreateProfile = () => {
     formData: "",
     data: "",
   });
+  const [loading, setLoading] = useState(false);
   const { user, token } = isAuthenticated();
   const { name, bio, link, photo, error, redirect, formData, data } = profile;
 
@@ -40,6 +41,15 @@ const CreateProfile = () => {
     }
   };
 
+  const renderLoading = () => {
+    if (loading == true) {
+      return (
+        <div className="circular__progress">
+          <CircularProgress color="inherit" />
+        </div>
+      );
+    }
+  };
   const redirectToHome = () => {
     if (redirect === true) {
       updateLocalStorage("token", data);
@@ -48,9 +58,11 @@ const CreateProfile = () => {
   };
 
   const submitProfile = (event) => {
+    setLoading(true);
     event.preventDefault();
     createProfile(token, formData, user._id)
       .then((data) => {
+        setLoading(false);
         if (data.error) {
           setProfile({
             ...profile,
@@ -70,57 +82,61 @@ const CreateProfile = () => {
         }
       })
       .catch((error) => {
+        setLoading(false);
         setProfile({ ...profile, error: error, redirect: false, data: "" });
       });
   };
 
   const loadProfile = () => {
-    return (
-      <div className="profile">
-        <div className="profile__container">
-          <input
-            accept="image/*"
-            type="file"
-            placeholder="Profile picture"
-            onChange={handleChange("photo")}
-          />
-          <form>
+    if (loading === false) {
+      return (
+        <div className="profile">
+          <div className="profile__container">
             <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              onChange={handleChange("name")}
+              accept="image/*"
+              type="file"
+              placeholder="Profile picture"
+              onChange={handleChange("photo")}
             />
-            <input
-              type="text"
-              name="bio"
-              placeholder="Bio"
-              onChange={handleChange("bio")}
-            />
-            <input
-              type="text"
-              name="link"
-              placeholder="Link"
-              onChange={handleChange("link")}
-            />
-            <br />
-            <br />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={submitProfile}
-              fullWidth={true}
-            >
-              Create Profile
-            </Button>
-          </form>
+            <form>
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                onChange={handleChange("name")}
+              />
+              <input
+                type="text"
+                name="bio"
+                placeholder="Bio"
+                onChange={handleChange("bio")}
+              />
+              <input
+                type="text"
+                name="link"
+                placeholder="Link"
+                onChange={handleChange("link")}
+              />
+              <br />
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={submitProfile}
+                fullWidth={true}
+              >
+                Create Profile
+              </Button>
+            </form>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   return (
     <div>
+      {renderLoading()}
       {errorOnSubmit()}
       {loadProfile()}
       {redirectToHome()}

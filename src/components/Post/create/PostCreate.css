@@ -32,5 +32,10 @@ input{
     border-radius: 6px;
 }
 
+.circular__progress{
+    position: fixed;
+    top: 50%;
+    left  :50%
+ }
 
 

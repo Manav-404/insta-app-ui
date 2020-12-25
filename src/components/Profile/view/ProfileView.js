@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import { getProfileById, addAndNotify } from "../helper/profileHelper";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, CircularProgress } from "@material-ui/core";
 import GridOnIcon from "@material-ui/icons/GridOn";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import {
@@ -40,6 +40,7 @@ const ProfileView = () => {
   const [add, setAdd] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [bookmark, setBookmark] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getProfile();
@@ -57,6 +58,14 @@ const ProfileView = () => {
     }
   };
 
+  const renderLoading = () => {
+    return (
+      <div className="circular__progress">
+        <CircularProgress color="inherit" size={50} />
+      </div>
+    );
+  };
+
   const followChecker = () => {
     user.following.map((friend, index) => {
       if (friend._id == id) {
@@ -66,8 +75,10 @@ const ProfileView = () => {
   };
 
   const getProfile = () => {
+    setLoading(true);
     getProfileById(id, token)
       .then((data) => {
+        setLoading(false);
         setProfile({
           uid: data._id,
           username: data.username,
@@ -217,7 +228,7 @@ const ProfileView = () => {
           <div className="profile__bio">
             <h3 className="name">{name}</h3>
             <p>{bio}</p>
-    <a href={link}> {link}</a>
+            <a href={` https://${link}`}>{link}</a>
           </div>
         </div>
       </div>
@@ -252,14 +263,18 @@ const ProfileView = () => {
   };
 
   const loadProfile = () => {
-    return (
-      <div>
-        <Header />
-        {loadTop()}
-        {loadBottom()}
-        {addToFollowing()}
-      </div>
-    );
+    if (loading === false) {
+      return (
+        <div>
+          <Header />
+          {loadTop()}
+          {loadBottom()}
+          {addToFollowing()}
+        </div>
+      );
+    } else {
+      return <div>{renderLoading()}</div>;
+    }
   };
   return <div>{loadProfile()}</div>;
 };
