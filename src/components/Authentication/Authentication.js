@@ -29,7 +29,7 @@ const Authentication = () => {
   const { username, email, password, error, redirect } = values;
 
   const handleChange = (name) => (event) => {
-    setValues({ ...values, [name]: event.target.value });
+    setValues({ ...values, [name]: event.target.value , error:'' });
   };
 
   const redirectToProfile = () => {
@@ -55,6 +55,22 @@ const Authentication = () => {
   };
 
   const onSignUpSubmit = (event) => {
+
+    if(!username || !email || !password){
+      setValues({...values , error: 'All fields are required.'})
+      return;
+    }
+
+    // if(!email.toLowerCase().match('/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i')){
+    //   setValues({...values , error: 'Invalid email id'})
+    //   return;
+    // }
+
+    // if(!password.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')){
+    //   setValues({...values, error: 'Password requires atleat 8 characters, 1 uppercase, 1 lowercase and 1 special character.'})
+    //   return;
+    // }
+
     setLoading(true);
     event.preventDefault();
     Signup({ username, email, password })

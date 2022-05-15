@@ -62,7 +62,7 @@ const Header = () => {
         <HomeRoundedIcon onClick={() => setHome(true)} />
         <PostAddRoundedIcon onClick={() => setPost(true)} />
         <Link to={`/profile/view/${user._id}`}>
-          <ImageHelper id={user._id} size="small"></ImageHelper>
+          <ImageHelper id={user.photo} size="small"></ImageHelper>
         </Link>
         {redirect()}
       </div>

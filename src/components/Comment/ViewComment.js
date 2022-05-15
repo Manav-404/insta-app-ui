@@ -7,10 +7,10 @@ import { useState } from "react";
 import { isAuthenticated } from "../Authentication/helper/authenticationHelper";
 import ImageHelper from "../ImageHelper/ImageHelper";
 
-const ViewComment = () => {
+const ViewComment = (props) => {
   const { postId } = useParams();
   const { user, token } = isAuthenticated();
-  const [comment, setComment] = useState([]);
+  const [comment, setComment] = useState({});
 
   useEffect(() => {
     getComments();
@@ -20,6 +20,7 @@ const ViewComment = () => {
     getCommentsByPostId(token, postId)
       .then((data) => {
         if (!data.error) {
+          console.log(data)
           setComment(data);
         }
       })
@@ -31,14 +32,14 @@ const ViewComment = () => {
     return (
       <div className="comment__container">
         <div className="comment_left">
-          <PostImageHelper post={postId} width={564} height={564} />
+          <PostImageHelper post={props.location.state.photo} width={564} height={564} />
         </div>
         <div className="comment__right">
           {comment.length > 0 ? (
             comment.map((com, index) => {
               return (
                 <div key={index} className="comment__item">
-                  <ImageHelper id={com.user._id} size="small" />
+                  <ImageHelper id={com.user.photo} size="small" />
                   <div className="comment__name">
                     <p>
                       <b>{com.user.username}</b> {com.comment}

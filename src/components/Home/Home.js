@@ -13,6 +13,7 @@ import {
 } from "../Post/helper/PostHelper";
 import { postComment } from "../Comment/helper/commentHelper";
 import { Link, Redirect } from "react-router-dom";
+import { StarRateOutlined } from "@material-ui/icons";
 
 const Home = () => {
   const { user, token } = isAuthenticated();
@@ -22,12 +23,13 @@ const Home = () => {
   const [redirect, setRedirect] = useState({
     toRedirect: false,
     postId: "",
+    postPhoto: ''
   });
   const [bookmark, setBookmark] = useState("");
   const [redirectToProfile, setRedirectToProfile] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { toRedirect, postId } = redirect;
+  const { toRedirect, postId, postPhoto } = redirect;
 
   const getFriendsPost = () => {
     setLoading(true);
@@ -53,10 +55,14 @@ const Home = () => {
     setComment(event.target.value);
   };
 
-  const onRedirect = () => {
-    if (toRedirect == true) {
-      return <Redirect to={`/posts/comments/${postId}`} />;
-    }
+  const onRedirect = (post) => {
+      if(toRedirect){
+        return <Redirect to={{
+          pathname: `/posts/comments/${postId}`,
+          state: {photo:postPhoto }
+        }} />;
+      }
+  
   };
 
   const onPostComment = (post) => {
@@ -66,7 +72,7 @@ const Home = () => {
         if (data.error) {
           console.log(data.error);
         } else {
-          setRedirect({ ...redirect, toRedirect: true, postId: post._id });
+          setRedirect({ ...redirect, toRedirect: true, postId: post._id, postPhoto: post.photo });
         }
       })
       .catch((error) => {
@@ -77,7 +83,12 @@ const Home = () => {
 
   const profileRedirect = () => {
     if (redirectToProfile === true) {
-      return <Redirect to={`/profile/view/${user._id}`} />;
+      return <Redirect to={{
+        pathname: `/profile/view/${user._id}`,
+        state: {
+          photo: redirect.postPhoto
+        }
+      }}  />;
     }
   };
   const renderLoading = () => {
@@ -113,7 +124,7 @@ const Home = () => {
               <div className="card__start">
                 <div className="user">
                   <div className="userpic">
-                    <ImageHelper size="medium_small" id={post.user._id} />
+                    <ImageHelper size="medium_small" id={post.user.photo} />
                   </div>
                   <div className="usersname">
                     <p>{post.user.username}</p>
@@ -124,24 +135,24 @@ const Home = () => {
                 </div>
               </div>
               <div className="card__middle">
-                <PostImageHelper post={post._id} width={614} height={400} />
+                <PostImageHelper post={post.photo} width={614} height={400} />
               </div>
               <div className="card__end">
                 <div className="card__caption">
                   <div className="usersname">
-                    <p>manav.d5</p>
+                    <p>{post.user.username}</p>
                   </div>
                   <div className="caption">
                     <p>{post.caption}</p>
                   </div>
                 </div>
                 <div className="card__comments">
-                  <Link
-                    to={`posts/comments/${post._id}`}
+                  <div
+                    onClick={()=>setRedirect({...redirect, postId: post._id, postPhoto: post.photo, toRedirect: true})}
                     className="card__comments__link"
                   >
                     <p className="card__comments__text">View all comments</p>
-                  </Link>
+                  </div>
                 </div>
                 <section className="section">
                   <div className="card__send">

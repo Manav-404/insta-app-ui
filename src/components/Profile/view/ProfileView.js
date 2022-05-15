@@ -33,6 +33,7 @@ const ProfileView = () => {
     link: "",
     followers: [],
     following: [],
+    photo: ''
   });
 
   const [value, setValue] = useState("one");
@@ -50,7 +51,7 @@ const ProfileView = () => {
     getBookmarks();
   }, [id]);
 
-  const { username, name, bio, link, followers, following } = profile;
+  const { username, name, bio, link, followers, following, photo } = profile;
 
   const checker = () => {
     if (id === user._id) {
@@ -87,6 +88,7 @@ const ProfileView = () => {
           link: data.link,
           followers: data.followers,
           following: data.following,
+          photo: data.photo
         });
       })
       .catch((error) => {
@@ -166,7 +168,7 @@ const ProfileView = () => {
         <div className="profile__posts">
           {post.map((p, i) => {
             return (
-              <PostImageHelper key={i} post={p._id} width={293} height={293} />
+              <PostImageHelper key={i} post={p.photo} width={293} height={293} />
             );
           })}
         </div>
@@ -182,7 +184,7 @@ const ProfileView = () => {
         <div className="profile__posts">
           {bookmark.map((p, i) => {
             return (
-              <PostImageHelper key={i} post={p._id} width={293} height={293} />
+              <PostImageHelper key={i} post={p.photo} width={293} height={293} />
             );
           })}
         </div>
@@ -202,7 +204,7 @@ const ProfileView = () => {
     return (
       <div className="profile__main">
         <div className="profile__image">
-          <ImageHelper size="large" id={id} />
+          <ImageHelper size="large" id={photo} />
         </div>
         <div className="profile__info">
           <div className="profile__username">

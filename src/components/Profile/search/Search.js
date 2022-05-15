@@ -46,8 +46,7 @@ const Search = () => {
                   <div className="search__avatar">
                     <ImageHelper
                       size="medium"
-                      id={profile._id}
-                      id={profile._id}
+                      id={profile.photo}
                     />
                   </div>
                   <div
